@@ -26,6 +26,15 @@ begin
 	place_restante := l-2*t-n*q;
 	distance_debut_encoches := place_restante/2 + t;
 	
+	--On dessine le début du coté un trait de longueur distance_debut_encoches
+	
+	--parcours du coté : tant qu'on a pas fait le bon nombre de tailles dans le coté on boncle
+	--while nbtaille < nb_queues_encoches loop
+		--Appel du packqge svg pour dessiner les queues/encoches :
+		--si encoche : descendre de t, avancer de q, monter de t
+		--si queues : avancer de q
+	--end loop
+	
 	
 	
 end

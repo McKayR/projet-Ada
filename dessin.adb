@@ -27,10 +27,12 @@ package body dessin is
 
 	procedure dessus(x,y,epaisseur, longueur, largeur, longueurQueues : Natural) is
 	begin
-		NULL;
+		begin_polygon(x,y);
+		--add_point() ici
+		end_polygon ;
 	end;
 	procedure petite_face(x,y, epaisseur, largeur, hauteur : Natural) is 
-	-- J'ai collé ton code ici	
+		-- J'ai collé ton code ici	
 		longueur_usinee : Integer;
 		nb_queues_encoches : Integer;
 		place_restante : Integer;
@@ -59,9 +61,11 @@ package body dessin is
 		--si queues : avancer de q
 		--end loop
 	end;
-	
+
 	procedure grande_face(x,y, epaisseur, longueur, hauteur : Natural) is
 	begin
-		NULL;
+		begin_polygon(x,y);
+		--add_point() ici
+		end_polygon;
 	end;
 end dessin ;

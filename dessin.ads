@@ -1,3 +1,5 @@
+with svg ; use svg ;
+
 package dessin is
 	procedure boite(epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt : Natural ) ;
 	procedure demi_boite(x,y,epaisseur, longueur, largeur, longueurQueues, hauteur : Natural) ;

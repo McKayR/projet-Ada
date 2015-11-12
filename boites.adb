@@ -4,7 +4,7 @@ with svg ; use svg ;
 with dessin ;
 procedure boites is
 	epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt : Natural;
-	nomFichier : StrB.Bounded_String ; 
+	nomFichier : StrB.Bounded_String ; --definit dans svg
 begin
 	if Argument_Count /= 14 then
 		Put("Nombre d'arguments invalide") ;
@@ -33,7 +33,7 @@ begin
 		end loop ;
 		--TODO:ajouter test de hauteur interne
 		open_file(nomFichier);
-		svg.start(640, 480);
+		svg.start(640, 480); -- a definir en fonction de la taille de la boite
 		dessin.boite(epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt) ;
 		svg.stop;
 		close_file ;

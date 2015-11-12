@@ -1,10 +1,8 @@
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Text_IO ; use Ada.Text_IO ;
-with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
-with Ada.Strings.Bounded ; use Ada.Strings.Bounded ;
+with svg ; use svg ;
 procedure boites is
 	epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt : Natural;
-	package StrB is new Ada.strings.Bounded.Generic_Bounded_Length(Max => 256) ; use StrB ; -- taille max d'un nom de fichier.
 	nomFichier : StrB.Bounded_String ; 
 
 	procedure dessine_cote(t, q, l, w : Natural) is -- il va falloir faire un package, ce serait l'idéal
@@ -62,8 +60,7 @@ begin
 				end case ;
 			end if ;
 		end loop ;
-		--Put(nomFichier);
-		--Put(epaisseur);Put(longueur);Put(largeur);Put(longueurQueues);Put(hauteurExt);Put(hauteurInt);
+
 		--dessine_fond(epaisseur, longueur_queue, longueur, largeur);
 		--dessine_cote(epaisseur, longueur_queue, longueur, largeur);
 	end if ;

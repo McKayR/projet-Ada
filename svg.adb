@@ -25,17 +25,17 @@ package body svg is
 
 	procedure begin_polygon(x, y : Natural) is
 	begin
-	NULL;
+	Put(fichier, "<polygon points=""");
 	end;
 
 	procedure end_polygon is
 	begin
-	NULL;
+	Put(fichier, """style=""stroke:red;stroke-width:0.1"" />");
 	end;
 
 	procedure add_point(x, y : Natural) is
 	begin
-	NULL;
+	Put(fichier, Integer'Image(x) & "," & Integer'Image(y) & " ");
 	end;
 
 end svg;

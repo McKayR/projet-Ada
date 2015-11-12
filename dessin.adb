@@ -1,10 +1,9 @@
-package dessin is
-begin
+package body dessin is
 	procedure boite(epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt : Natural ) is
 	begin
-		demi_boite(0, 0, epaisseur, longeur, largeur, longeurQueues, hauteurExt / 2 : Natural);	-- est-ce qu'on passe hauteur en float ?
-		demi_boite(0, max(max(longueur, largeur),hauteurExt/2) + 10, epaisseur, longeur, largeur, longeurQueues, hauteurExt / 2 : Natural);	-- est-ce qu'on passe hauteur en float ?
-		demi_boite(0, 2*(max(max(longueur, largeur),hauteurExt/2) + 10), epaisseur, longeur, largeur, longeurQueues, hauteurInt : Natural);	-- est-ce qu'on passe hauteur en float ?
+		demi_boite(0, 0, epaisseur, longueur, largeur, longueurQueues, hauteurExt/2 : Natural);	-- est-ce qu'on passe hauteur en float 
+		demi_boite(0, Integer'Max(Integer'Max(longueur, largeur),hauteurExt/2) + 10, epaisseur, longueur, largeur, longueurQueues, hauteurExt / 2 : Natural);	-- est-ce qu'on passe hauteur en float ?
+		demi_boite(0, 2*(Integer'Max(Integer'Max(longueur, largeur),hauteurExt/2) + 10), epaisseur, longueur, largeur, longueurQueues, hauteurInt : Natural);	-- est-ce qu'on passe hauteur en float ?
 	end;
 	procedure demi_boite(x,y,epaisseur, longueur, largeur, longueurQueues, hauteur : Natural) is
 		margeX : Natural ;
@@ -12,16 +11,16 @@ begin
 		margeX := 0 ;
 		dessus(x, y, epaisseur, longueur, largeur, longueurQueues);
 
-		margeX := margeX + max(longueur, largeur);
+		margeX := margeX + Integer'Max(longueur, largeur);
 		petite_face(x + margeX, y, epaisseur, largeur, hauteur);
 
-		margeX := margeX + max(largeur, hauteur);
+		margeX := margeX + Integer'Max(largeur, hauteur);
 		grande_face(x + margeX, y, epaisseur, longueur, hauteur);
 
-		margeX := margeX + max(longueur, hauteur);
+		margeX := margeX + Integer'Max(longueur, hauteur);
 		petite_face(x + margeX, y, epaisseur, largeur, hauteur);
 
-		margeX := margeX + max(largeur, hauteur);
+		margeX := margeX + Integer'Max(largeur, hauteur);
 		grande_face(x + margeX, y, epaisseur, longueur, hauteur);
 
 	end;
@@ -38,7 +37,7 @@ begin
 		distance_debut_encoches : Float;
 	begin
 		--On enlève l'épaisseur en début et fin de coté'
-		longueur_usinee := l-2*t;
+		--longueur_usinee := l-2*t;
 		--On défini le nombre d'enchoches/queues à usiner'
 		--nb_queues_encoches := Float'Floor (longueur_usinee/q);
 

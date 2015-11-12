@@ -25,17 +25,19 @@ package body svg is
 
 	procedure begin_polygon(x, y : Natural) is
 	begin
-	Put(fichier, "<polygon points=""");
+		xPolygon := x;
+		yPolygon := y;
+		Put(fichier, "<polygon points=""");
 	end;
 
 	procedure end_polygon is
 	begin
-	Put(fichier, """style=""stroke:red;stroke-width:0.1"" />");
+		Put(fichier, """style=""stroke:red;stroke-width:0.1"" />");
 	end;
 
 	procedure add_point(x, y : Natural) is
 	begin
-	Put(fichier, Integer'Image(x) & "," & Integer'Image(y) & " ");
+		Put(fichier, Integer'Image(xPolygon + x) & "," & Integer'Image(yPolygon + y) & " ");
 	end;
 
 end svg;

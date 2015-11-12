@@ -60,7 +60,11 @@ begin
 				end case ;
 			end if ;
 		end loop ;
-
+		open_file(nomFichier);
+		svg.start(640, 480);
+		--dessiner ici
+		svg.stop;
+		close_file ;
 		--dessine_fond(epaisseur, longueur_queue, longueur, largeur);
 		--dessine_cote(epaisseur, longueur_queue, longueur, largeur);
 	end if ;

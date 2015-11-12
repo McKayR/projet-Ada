@@ -1,9 +1,9 @@
 package body dessin is
 	procedure boite(epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt : Natural ) is
 	begin
-		demi_boite(0, 0, epaisseur, longueur, largeur, longueurQueues, hauteurExt/2 : Natural);	-- est-ce qu'on passe hauteur en float 
-		demi_boite(0, Integer'Max(Integer'Max(longueur, largeur),hauteurExt/2) + 10, epaisseur, longueur, largeur, longueurQueues, hauteurExt / 2 : Natural);	-- est-ce qu'on passe hauteur en float ?
-		demi_boite(0, 2*(Integer'Max(Integer'Max(longueur, largeur),hauteurExt/2) + 10), epaisseur, longueur, largeur, longueurQueues, hauteurInt : Natural);	-- est-ce qu'on passe hauteur en float ?
+		demi_boite(0, 0, epaisseur, longueur, largeur, longueurQueues, hauteurExt/2 );
+		demi_boite(0, Integer'Max(Integer'Max(longueur, largeur),hauteurExt/2) + 10, epaisseur, longueur, largeur, longueurQueues, hauteurExt / 2 );
+		demi_boite(0, 2*(Integer'Max(Integer'Max(longueur, largeur),hauteurExt/2) + 10), epaisseur, longueur, largeur, longueurQueues, hauteurInt );
 	end;
 	procedure demi_boite(x,y,epaisseur, longueur, largeur, longueurQueues, hauteur : Natural) is
 		margeX : Natural ;

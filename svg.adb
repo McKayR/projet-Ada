@@ -12,9 +12,9 @@ package body svg is
 	procedure start(width, height : Natural) is
 	begin
 		Put(fichier,"<svg width=""");
-		Put(fichier,height);
-		Put(fichier,""" height =""");
 		Put(fichier,width);
+		Put(fichier,""" height =""");
+		Put(fichier,height);
 		Put(fichier,""">");
 	end;
 

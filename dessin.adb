@@ -1,9 +1,9 @@
 package body dessin is
 	procedure boite(epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt : Natural ) is
 	begin
-		demi_boite(0, 0, epaisseur, longueur, largeur, longueurQueues, hauteurExt/2 );
-		demi_boite(0, Integer'Max(Integer'Max(longueur, largeur),hauteurExt/2) + 10, epaisseur, longueur, largeur, longueurQueues, hauteurExt / 2 );
-		demi_boite(0, 2*(Integer'Max(Integer'Max(longueur, largeur),hauteurExt/2) + 10), epaisseur, longueur, largeur, longueurQueues, hauteurInt );
+		demi_boite(10, 10, epaisseur, longueur, largeur, longueurQueues, hauteurExt/2 );
+		demi_boite(10,Integer'Max(largeur,hauteurExt/2) + 20, epaisseur, longueur, largeur, longueurQueues, hauteurExt / 2 );
+		demi_boite(10, 2*Integer'Max(largeur,hauteurExt/2) + 30, epaisseur, longueur - 2*epaisseur, largeur - 2*epaisseur, longueurQueues, hauteurInt );
 	end;
 	procedure demi_boite(x,y,epaisseur, longueur, largeur, longueurQueues, hauteur : Natural) is
 		margeX : Natural ;
@@ -11,159 +11,152 @@ package body dessin is
 		margeX := 0 ;
 		dessus(x, y, epaisseur, longueur, largeur, longueurQueues);
 
-		margeX := margeX + Integer'Max(longueur, largeur);
-		petite_face(x + margeX, y, epaisseur, largeur, hauteur);
+		margeX := margeX + longueur + 10;
+		petite_face(x + margeX, y, epaisseur, largeur, hauteur, longueurQueues);
 
-		margeX := margeX + Integer'Max(largeur, hauteur);
-		grande_face(x + margeX, y, epaisseur, longueur, hauteur);
+		margeX := margeX + largeur + 10;
+		grande_face(x + margeX, y, epaisseur, longueur, hauteur, longueurQueues);
 
-		margeX := margeX + Integer'Max(longueur, hauteur);
-		petite_face(x + margeX, y, epaisseur, largeur, hauteur);
+		margeX := margeX + longueur + 10;
+		petite_face(x + margeX, y, epaisseur, largeur, hauteur, longueurQueues);
 
-		margeX := margeX + Integer'Max(largeur, hauteur);
-		grande_face(x + margeX, y, epaisseur, longueur, hauteur);
+		margeX := margeX + largeur + 10;
+		grande_face(x + margeX, y, epaisseur, longueur, hauteur, longueurQueues);
 
 	end;
+	function nombre_queues(distance, epaisseur, longueurQueues : Natural) return Natural is
+		 n : Natural ;
+	begin
+		n := (distance - 2*epaisseur)/longueurQueues ;
+		if n mod 2 = 0 then 
+			n := n -1 ;
+		end if;
+		return n ;
+	end;
+	procedure creneaux(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction ; sens : Orientation) is
+	type ptr is access all Float ;
+	x,y : aliased Float ;
+	l, h : ptr ;
+	incL, incH : Integer ;
+ 	coefSens : array(Orientation) of Integer := (Interieur => 1, Exterieur => -1);
+	begin
+		x := x0 ;
+		y := y0 ;
+			if bord = Haut or bord = Bas then
+				l := x'access ;
+				h := y'access ;
+			else 
+				l := y'access ;
+				h := x'access ;
+			end if ;
+			if bord = Bas  or bord = Gauche then
+				incL := -1 ;
+			else
+				incL := 1 ;
+			end if ;
+			if bord = Haut or bord = Gauche then
+				incH := 1 ;
+			else
+				incH := -1 ;
+			end if ;
+		for i in 1..((nombre + 1))/2 loop
+			add_point(x, y) ;
+			h.all := h.all + Float(coefSens(sens)*incH*hauteur) ;
+			add_point(x, y);
+			l.all := l.all + Float(incL*longueur) ;
+			add_point(x, y);
+			h.all := h.all - Float(coefSens(sens)*incH*hauteur) ;
+			add_point(x,y);
+			l.all := l.all + Float(incL*longueur) ;
+		end loop ;
 
+	end;
+	procedure queues(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction) is
+	begin
+		creneaux(x0,y0, longueur, hauteur, nombre, bord, Exterieur) ;
+	end;
+	procedure encoches(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction) is
+	begin
+		creneaux(x0,y0, longueur, hauteur, nombre, bord, Interieur) ;
+	end;
 	procedure dessus(x,y,epaisseur, longueur, largeur, longueurQueues : Natural) is
 		nombreLargeur, nombrelongueur : Natural ; 
-		margeLongueur, margeLargeur, posX, posY : Float ;
+		margeLongueur, margeLargeur : Float ;
 	begin
-		nombreLargeur := (largeur - 2*epaisseur)/longueurQueues ;
-		if nombreLargeur mod 2 = 0 then 
-			nombreLargeur := nombreLargeur -1 ;
-		end if;
-		nombreLongueur := (longueur - 2*epaisseur)/longueurQueues ;
-		if nombreLongueur mod 2 = 0 then 
-			nombreLongueur := nombreLongueur -1 ;
-		end if;
+		nombreLargeur := nombre_queues(largeur, epaisseur, longueurQueues);
+		nombreLongueur := nombre_queues(longueur, epaisseur, longueurQueues);
 		
 		margeLongueur := Float(longueur - nombreLongueur*longueurQueues)/2.0;
 		margeLargeur := Float(largeur - nombreLargeur*longueurQueues) /2.0;
 
+		margeLargeur := margeLargeur + Float(longueurQueues) ;
+		if nombreLargeur > 1 then
+			nombreLargeur := nombreLargeur -2 ;
+		end if ;
 		begin_polygon(x,y);
 		
 		add_point(0.0,0.0);
-		add_point(margeLongueur,0.0);
-
-		posX := margeLongueur ;
-		posY := Float(epaisseur) ;
+		encoches(margeLongueur, 0.0, longueurQueues, epaisseur, nombreLongueur, Haut);
+		add_point(Float(longueur), 0.0) ;
+		encoches(Float(longueur), margeLargeur , longueurQueues, epaisseur, nombreLargeur, Droite); 
+		add_point(Float(longueur), Float(largeur));
+		encoches(Float(longueur) - margeLongueur, Float(largeur), longueurQueues, epaisseur, nombreLongueur, Bas);
+		add_point(0.0, Float(largeur));
+		encoches(0.0, Float(largeur) - margeLargeur, longueurQueues, epaisseur, nombreLargeur, Gauche);
 		
-		for i in 1..nombreLongueur loop
-			add_point(posX, posY) ;
-			posX := posX + Float(longueurQueues) ;
-			add_point(posX, posY);
-			if i mod 2 = 0 then
-				posY := Float(epaisseur) ;
-			else
-				posY := 0.0 ;
-			end if;
-		end loop ;
-
-		add_point(posX, posY);
-		posX := Float(longueur) ;
-		posY := 0.0;
-		add_point(posX, posY);
-		posY := posY + margeLargeur ;
-
-		for i in 1..nombreLargeur loop
-			add_point(posX, posY) ;
-			posY := posY + Float(longueurQueues) ;
-			add_point(posX, posY);
-			if i mod 2 = 0 then
-				posX := Float(longueur) ;
-			else
-				posX :=  Float(longueur - epaisseur);
-			end if;
-		end loop ;
-
-		posY := Float(largeur) ;
-		posX := Float(longueur) ;
-		add_point(posX, posY) ;
-		posX := posX - margeLongueur ;
-		add_point(posX, posY);
-		posY := Float(largeur - epaisseur) ;
-
-		for i in 1..nombreLongueur loop
-			add_point(posX, posY) ;
-			posX := posX - Float(longueurQueues) ;
-			add_point(posX, posY);
-			if i mod 2 = 0 then
-				posY := Float(largeur - epaisseur) ;
-			else
-				posY := Float(largeur) ;
-			end if;
-		end loop ;
-
-		add_point(posX, posY);
-		posX := 0.0 ;
-		add_point(posX, posY) ;
-		posY := posY - margeLargeur ;
-
-		for i in 1..nombreLargeur loop
-			add_point(posX, posY) ;
-			posY := posY - Float(longueurQueues) ;
-			add_point(posX, posY);
-			if i mod 2 = 0 then
-				posX := 0.0;
-			else
-				posX := Float(epaisseur) ;
-			end if;
-		end loop ;
-
 		end_polygon ;
 
 	end;
 	procedure petite_face(x,y, epaisseur, largeur, hauteur, longueurQueues : Natural) is 
-		-- J'ai collé ton code ici	
-		longueur_usinee : Integer;
-		nb_queues_encoches : Integer;
-		place_restante : Integer;
-		distance_debut_encoches : Float;
+		nombreHauteur, nombrelargeur : Natural ; 
+		margeLargeur, margeHauteur : Float ;
 	begin
-		--On enlève l'épaisseur en début et fin de coté'
-		longueur_usinee := largeur-2*epaisseur;
-		--On défini le nombre d'enchoches/queues à usiner'
-		nb_queues_encoches := Float'Floor (longueur_usinee/longueurQueues);
+		nombreHauteur := nombre_queues(hauteur, epaisseur, longueurQueues);
+		nombreLargeur := nombre_queues(largeur, epaisseur, longueurQueues);
+		
+		margeLargeur := Float(largeur - nombreLargeur*longueurQueues)/2.0;
+		margeHauteur := Float(hauteur - nombreHauteur*longueurQueues) /2.0;
 
-		--On garde un nombre impair de queues/encoches
-		if nb_queues_encoches mod 2 = 0 then
-			nb_queues_encoches := nb_queues_encoches - 1;
+		margeLargeur := margeLargeur + Float(longueurQueues) ;
+		if nombreLargeur > 1 then
+			nombreLargeur := nombreLargeur -2 ;
+		end if;
+		begin_polygon(x,y);
+		add_point(0.0,Float(epaisseur));
+		queues(margeLargeur, Float(epaisseur), longueurQueues, epaisseur, nombreLargeur, Haut);
+		add_point(Float(largeur), Float(epaisseur)) ;
+		encoches(Float(largeur), margeHauteur , longueurQueues, epaisseur, nombreHauteur, Droite); 
+		add_point(Float(largeur), Float(hauteur));
+		add_point(0.0, Float(hauteur));
+		encoches(0.0, Float(hauteur) - margeHauteur, longueurQueues, epaisseur, nombreHauteur, Gauche);
+		
+		end_polygon ;
+	end;
+
+	procedure grande_face(x,y, epaisseur, longueur, hauteur, longueurQueues : Natural) is
+		nombreHauteur, nombrelongueur : Natural ; 
+		margeLongueur, margeHauteur : Float ;
+	begin
+		nombreHauteur := nombre_queues(hauteur, epaisseur, longueurQueues);
+		nombreLongueur := nombre_queues(longueur, epaisseur, longueurQueues);
+		
+		margeLongueur := Float(longueur - nombreLongueur*longueurQueues)/2.0;
+		margeHauteur := Float(hauteur - nombreHauteur*longueurQueues) /2.0;
+
+		margeLongueur := margeLongueur + Float(longueurQueues) ;
+		if nombreLongueur > 1 then
+			nombreLongueur := nombreLongueur -2 ;
 		end if;
 
-		--Définition de la place restant après usinage (utile pour centrer les queues/encoches)
-		place_restante := l-2*t-n*q;
-		distance_debut_encoches := place_restante/2 + t;
-		
-		--On dessine le début du coté un trait de longueur distance_debut_encoches
 		begin_polygon(x,y);
-		x := x + distance_debut_encoche;
-		add_point(x,y);
-		--parcours du coté : tant qu'on a pas fait le bon nombre de tailles dans le coté on boncle
-		while nbtaille < nb_queues_encoches loop
-		--Appel du packqge svg pour dessiner les queues/encoches :
-		--si encoche : descendre de t, avancer de q, monter de t
-		--si queues : avancer de q
-			if(nbtaille mod 2 = 0) then
-				y := y + epaisseur;
-				add_point(x,y);
-				x := x + longueurQueues;
-				add_point(x,y);
-				y := y - epaisseur;
-				add_point(x,y);
-			else
-				x := x + longueurQueues;
-				
-			end if;
-			
-			nbtaille := nbtaille + 1;
-		end loop
+		add_point(Float(epaisseur),Float(epaisseur));
+		queues(margeLongueur, Float(epaisseur), longueurQueues, epaisseur, nombreLongueur, Haut);
+		add_point(Float(longueur - epaisseur), Float(epaisseur)) ;
+		queues(Float(longueur - epaisseur), margeHauteur , longueurQueues, epaisseur, nombreHauteur, Droite); 
+		add_point(Float(longueur - epaisseur), Float(hauteur));
+		add_point(Float(epaisseur), Float(hauteur));
+		queues(Float(epaisseur), Float(hauteur) - margeHauteur, longueurQueues, epaisseur, nombreHauteur, Gauche);
+		end_polygon ;
 	end;
 
-	procedure grande_face(x,y, epaisseur, longueur, hauteur : Natural) is
-	begin
-		begin_polygon(x,y);
-		--add_point() ici
-		end_polygon;
-	end;
 end dessin ;

@@ -33,7 +33,7 @@ begin
 		end loop ;
 		--TODO:ajouter test de hauteur interne
 		open_file(nomFichier);
-		svg.start(640, 480); -- a definir en fonction de la taille de la boite
+		svg.start(3 * longueur + 2*largeur + 60, 2 * Integer'max(largeur, hauteurExt) + Integer'max(largeur, hauteurInt)+ 40); -- a definir en fonction de la taille de la boite
 		dessin.boite(epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt) ;
 		svg.stop;
 		close_file ;

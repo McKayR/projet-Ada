@@ -31,7 +31,7 @@ package body dessin is
 		--add_point() ici
 		end_polygon ;
 	end;
-	procedure petite_face(x,y, epaisseur, largeur, hauteur : Natural) is 
+	procedure petite_face(x,y, epaisseur, largeur, hauteur, longueurQueues : Natural) is 
 		-- J'ai collé ton code ici	
 		longueur_usinee : Integer;
 		nb_queues_encoches : Integer;
@@ -39,9 +39,9 @@ package body dessin is
 		distance_debut_encoches : Float;
 	begin
 		--On enlève l'épaisseur en début et fin de coté'
-		--longueur_usinee := l-2*t;
+		longueur_usinee := largeur-2*epaisseur;
 		--On défini le nombre d'enchoches/queues à usiner'
-		--nb_queues_encoches := Float'Floor (longueur_usinee/q);
+		nb_queues_encoches := Float'Floor (longueur_usinee/longueurQueues);
 
 		--On garde un nombre impair de queues/encoches
 		if nb_queues_encoches mod 2 = 0 then
@@ -49,17 +49,26 @@ package body dessin is
 		end if;
 
 		--Définition de la place restant après usinage (utile pour centrer les queues/encoches)
-		--place_restante := l-2*t-n*q;
-		--distance_debut_encoches := place_restante/2 + t;
-
+		place_restante := l-2*t-n*q;
+		distance_debut_encoches := place_restante/2 + t;
+		
 		--On dessine le début du coté un trait de longueur distance_debut_encoches
-
+		begin_polygon(x,y);
+		x := x + distance_debut_encoche;
+		add_point(x,y);
 		--parcours du coté : tant qu'on a pas fait le bon nombre de tailles dans le coté on boncle
-		--while nbtaille < nb_queues_encoches loop
+		while nbtaille < nb_queues_encoches loop
 		--Appel du packqge svg pour dessiner les queues/encoches :
 		--si encoche : descendre de t, avancer de q, monter de t
 		--si queues : avancer de q
-		--end loop
+			if(nbtaille mod 2 = 0) then
+				
+			else
+				
+			end if;
+			
+			nbtaille := nbtaille + 1;
+		end loop
 	end;
 
 	procedure grande_face(x,y, epaisseur, longueur, hauteur : Natural) is

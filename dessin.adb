@@ -26,10 +26,93 @@ package body dessin is
 	end;
 
 	procedure dessus(x,y,epaisseur, longueur, largeur, longueurQueues : Natural) is
+		nombreLargeur, nombrelongueur : Natural ; 
+		margeLongueur, margeLargeur, posX, posY : Float ;
 	begin
+		nombreLargeur := (largeur - 2*epaisseur)/longueurQueues ;
+		if nombreLargeur mod 2 = 0 then 
+			nombreLargeur := nombreLargeur -1 ;
+		end if;
+		nombreLongueur := (longueur - 2*epaisseur)/longueurQueues ;
+		if nombreLongueur mod 2 = 0 then 
+			nombreLongueur := nombreLongueur -1 ;
+		end if;
+		
+		margeLongueur := Float(longueur - nombreLongueur*longueurQueues)/2.0;
+		margeLargeur := Float(largeur - nombreLargeur*longueurQueues) /2.0;
+
 		begin_polygon(x,y);
-		--add_point() ici
+		
+		add_point(0.0,0.0);
+		add_point(margeLongueur,0.0);
+
+		posX := margeLongueur ;
+		posY := Float(epaisseur) ;
+		
+		for i in 1..nombreLongueur loop
+			add_point(posX, posY) ;
+			posX := posX + Float(longueurQueues) ;
+			add_point(posX, posY);
+			if i mod 2 = 0 then
+				posY := Float(epaisseur) ;
+			else
+				posY := 0.0 ;
+			end if;
+		end loop ;
+
+		add_point(posX, posY);
+		posX := Float(longueur) ;
+		posY := 0.0;
+		add_point(posX, posY);
+		posY := posY + margeLargeur ;
+
+		for i in 1..nombreLargeur loop
+			add_point(posX, posY) ;
+			posY := posY + Float(longueurQueues) ;
+			add_point(posX, posY);
+			if i mod 2 = 0 then
+				posX := Float(longueur) ;
+			else
+				posX :=  Float(longueur - epaisseur);
+			end if;
+		end loop ;
+
+		posY := Float(largeur) ;
+		posX := Float(longueur) ;
+		add_point(posX, posY) ;
+		posX := posX - margeLongueur ;
+		add_point(posX, posY);
+		posY := Float(largeur - epaisseur) ;
+
+		for i in 1..nombreLongueur loop
+			add_point(posX, posY) ;
+			posX := posX - Float(longueurQueues) ;
+			add_point(posX, posY);
+			if i mod 2 = 0 then
+				posY := Float(largeur - epaisseur) ;
+			else
+				posY := Float(largeur) ;
+			end if;
+		end loop ;
+
+		add_point(posX, posY);
+		posX := 0.0 ;
+		add_point(posX, posY) ;
+		posY := posY - margeLargeur ;
+
+		for i in 1..nombreLargeur loop
+			add_point(posX, posY) ;
+			posY := posY - Float(longueurQueues) ;
+			add_point(posX, posY);
+			if i mod 2 = 0 then
+				posX := 0.0;
+			else
+				posX := Float(epaisseur) ;
+			end if;
+		end loop ;
+
 		end_polygon ;
+
 	end;
 	procedure petite_face(x,y, epaisseur, largeur, hauteur, longueurQueues : Natural) is 
 		-- J'ai collé ton code ici	

@@ -32,12 +32,12 @@ package body svg is
 
 	procedure end_polygon is
 	begin
-		Put(fichier, """style=""stroke:red;stroke-width:0.1"" />");
+		Put(fichier, """ style=""stroke:red;stroke-width:0.1"" />");
 	end;
 
-	procedure add_point(x, y : Natural) is
+	procedure add_point(x, y : Float) is
 	begin
-		Put(fichier, Integer'Image(xPolygon + x) & "," & Integer'Image(yPolygon + y) & " ");
+		Put(fichier, Float'Image(Float(xPolygon) + x) & "," & Float'Image(Float(yPolygon) + y) & " ");
 	end;
 
 end svg;

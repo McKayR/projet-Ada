@@ -5,35 +5,40 @@ with dessin ;
 procedure boites is
 	epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt : Natural;
 	nomFichier : StrB.Bounded_String ; --definit dans svg
+	ARGUMENTS_INVALIDE, NOMBRE_ARGUMENT : Exception ;
 begin
 	if Argument_Count /= 14 then
 		Put("Nombre d'arguments invalide") ;
 	else
-		for i in 1..(Argument_Count -1) loop -- Pour tous les arguments (a changer aussi)
-			if Argument(i)(1) = '-' then -- On regarde si c'est le nom d'un parametre
-				case Argument(i)(2) is
+		--ajouter exceptions pour -parametre inconnu -pas le bon nombre parametre -
+		for i in 1..7 loop -- Pour tous les arguments (a changer aussi)
+			if Argument(2*i-1)(1) = '-' then -- On regarde si c'est le nom d'un parametre
+
+				case Argument(2*i-1)(2) is
 					when 't' =>
-						epaisseur := Natural'Value(Argument(i+1)) ;
+						epaisseur := Natural'Value(Argument(2*i)) ;
 					when 'l' =>
-						longueur := Natural'Value(Argument(i+1)) ;
+						longueur := Natural'Value(Argument(2*i)) ;
 					when 'w' =>
-						largeur := Natural'Value(Argument(i+1)) ;
+						largeur := Natural'Value(Argument(2*i)) ;
 					when 'q' =>
-						longueurQueues := Natural'Value(Argument(i+1)) ;
+						longueurQueues := Natural'Value(Argument(2*i)) ;
 					when 'h' =>
-						hauteurExt := Natural'Value(Argument(i+1)) ;
+						hauteurExt := Natural'Value(Argument(2*i)) ;
 					when 'b' =>
-						hauteurInt := Natural'Value(Argument(i+1)) ;
+						hauteurInt := Natural'Value(Argument(2*i)) ;
 					when 'f' =>
-						nomFichier := StrB.To_Bounded_String(Argument(i+1)) ;
+						nomFichier := StrB.To_Bounded_String(Argument(2*i)) ;
 					when others =>
 						Put("Paramètre inconnu") ;
 				end case ;
+			else
+				raise ARGUMENTS_INVALIDE ;
 			end if ;
 		end loop ;
-		--TODO:ajouter test de hauteur interne
+		--veirifer dimensions (hauteur, largeur, longueur > 4*epaisseur)
 		open_file(nomFichier);
-		svg.start(3 * longueur + 2*largeur + 60, 2 * Integer'max(largeur, hauteurExt) + Integer'max(largeur, hauteurInt)+ 40); -- a definir en fonction de la taille de la boite
+		svg.start(3 * longueur + 2*largeur + 60, 2 * Integer'max(largeur, hauteurExt) + Integer'max(largeur, hauteurInt)+ 40); 
 		dessin.boite(epaisseur, longueur, largeur, longueurQueues, hauteurExt, hauteurInt) ;
 		svg.stop;
 		close_file ;

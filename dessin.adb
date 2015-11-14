@@ -26,11 +26,12 @@ package body dessin is
 	end;
 	function nombre_queues(distance, epaisseur, longueurQueues : Natural) return Natural is
 		 n : Natural ;
+		 t : array(Boolean) of Integer := (True => 1, False => 0);
 	begin
 		n := (distance - 2*epaisseur)/longueurQueues ;
-		if n mod 2 = 0 then 
-			n := n -1 ;
-		end if;
+		if n > 0 then
+			n := n - t(n mod 2 = 0) ;
+		end if ;
 		return n ;
 	end;
 	procedure creneaux(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction ; sens : Orientation) is
@@ -143,10 +144,10 @@ package body dessin is
 		margeLongueur := Float(longueur - nombreLongueur*longueurQueues)/2.0;
 		margeHauteur := Float(hauteur - nombreHauteur*longueurQueues) /2.0;
 
-		margeLongueur := margeLongueur + Float(longueurQueues) ;
-		if nombreLongueur > 1 then
-			nombreLongueur := nombreLongueur -2 ;
-		end if;
+		--margeLongueur := margeLongueur + Float(longueurQueues) ;
+		--if nombreLongueur > 1 then
+		--	nombreLongueur := nombreLongueur -2 ;
+		--end if;
 
 		begin_polygon(x,y);
 		add_point(Float(epaisseur),Float(epaisseur));

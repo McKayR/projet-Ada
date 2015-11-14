@@ -12,6 +12,5 @@ package dessin is
 	procedure encoches(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction);
 	procedure queues(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction);
 	procedure creneaux(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction; sens : Orientation);
-	--procedure bord(n) -- a declarer si besoin
 	
 end dessin ;

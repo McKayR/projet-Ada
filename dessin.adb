@@ -34,44 +34,30 @@ package body dessin is
 		end if ;
 		return n ;
 	end;
+
 	procedure creneaux(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction ; sens : Orientation) is
 	type ptr is access all Float ;
 	x,y : aliased Float ;
-	l, h : ptr ;
-	incL, incH : Integer ;
  	coefSens : array(Orientation) of Integer := (Interieur => 1, Exterieur => -1);
+	incrementL : array(Direction) of Integer := (Bas | Gauche => -1, others => 1);
+	incrementH : array(Direction) of Integer := (Haut | Gauche => 1, others => -1) ;
+	l : array(Direction) of ptr := (Haut | Bas => x'access, others => y'access);
+	h : array(Direction) of ptr := (Haut |Bas => y'access, others => x'access);
 	begin
-		x := x0 ;
-		y := y0 ;
-			if bord = Haut or bord = Bas then
-				l := x'access ;
-				h := y'access ;
-			else 
-				l := y'access ;
-				h := x'access ;
-			end if ;
-			if bord = Bas  or bord = Gauche then
-				incL := -1 ;
-			else
-				incL := 1 ;
-			end if ;
-			if bord = Haut or bord = Gauche then
-				incH := 1 ;
-			else
-				incH := -1 ;
-			end if ;
+		x := x0 ; y := y0 ;
 		for i in 1..((nombre + 1))/2 loop
 			add_point(x, y) ;
-			h.all := h.all + Float(coefSens(sens)*incH*hauteur) ;
+			h(bord).all := h(bord).all + Float(coefSens(sens)*incrementH(bord)*hauteur) ;
 			add_point(x, y);
-			l.all := l.all + Float(incL*longueur) ;
+			l(bord).all := l(bord).all + Float(incrementL(bord)*longueur) ;
 			add_point(x, y);
-			h.all := h.all - Float(coefSens(sens)*incH*hauteur) ;
+			h(bord).all := h(bord).all - Float(coefSens(sens)*incrementH(bord)*hauteur) ;
 			add_point(x,y);
-			l.all := l.all + Float(incL*longueur) ;
+			l(bord).all := l(bord).all + Float(incrementL(bord)*longueur) ;
 		end loop ;
 
 	end;
+
 	procedure queues(x0, y0 : Float ; longueur, hauteur, nombre : Natural ; bord : Direction) is
 	begin
 		creneaux(x0,y0, longueur, hauteur, nombre, bord, Exterieur) ;

@@ -62,8 +62,14 @@ package body dessin is
 		--si encoche : descendre de t, avancer de q, monter de t
 		--si queues : avancer de q
 			if(nbtaille mod 2 = 0) then
-				
+				y := y + epaisseur;
+				add_point(x,y);
+				x := x + longueurQueues;
+				add_point(x,y);
+				y := y - epaisseur;
+				add_point(x,y);
 			else
+				x := x + longueurQueues;
 				
 			end if;
 			
